@@ -106,6 +106,16 @@ func TestConverters_From(t *testing.T) {
 			makeExpNode:  func(n *movetree.Node) {},
 			expErrSubstr: "for prop KM",
 		},
+		{
+			desc: "Black Rank",
+			prop: "BR",
+			data: []string{"20k"},
+			makeExpNode: func(n *movetree.Node) {
+				n.GameInfo = &movetree.GameInfo{
+					BlackRank: "20k",
+				}
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -260,6 +270,34 @@ func TestConverters_ConvertNode(t *testing.T) {
 				*n.GameInfo.Komi = 3.25
 			},
 			expErrSubstr: "invalid komi",
+		},
+		{
+			desc: "Both Rank",
+			makeNode: func(n *movetree.Node) {
+				n.GameInfo = &movetree.GameInfo{
+					BlackRank: "20k",
+					WhiteRank: "7d",
+				}
+			},
+			expOut: "BR[20k]WR[7d]",
+		},
+		{
+			desc: "Black Rank",
+			makeNode: func(n *movetree.Node) {
+				n.GameInfo = &movetree.GameInfo{
+					BlackRank: "20k",
+				}
+			},
+			expOut: "BR[20k]",
+		},
+		{
+			desc: "White Rank",
+			makeNode: func(n *movetree.Node) {
+				n.GameInfo = &movetree.GameInfo{
+					WhiteRank: "7d",
+				}
+			},
+			expOut: "WR[7d]",
 		},
 	}
 
